@@ -36,13 +36,9 @@ program get_dropbox, rclass
     // Linux paths can be longer than Stata's max length, (4096 vs 2045).
     // I'll use a strL instead, if available. (strL was introduced in stata 13).
     // Windows paths are max 260 characters, so that's probably fine anyway.
-    if `c(stata_version)' >= 13 {
-        quietly generate strL dropbox_path = ""
-    }
-    else {
-        // else, make it as long as stata can accept (probably 244)
-        quietly generate str`c(maxstrvarlen)' dropbox_path = ""
-    }
+    // strL should work in versions >= 13, but insheetjson doesn't play nicely
+    // Just use the max length for normal strings instead.
+    quietly generate str`c(maxstrvarlen)' dropbox_path = ""
 
     quietly insheetjson dropbox_path using "`info_path'", col("business:path")
     quietly count if dropbox_path == ""
@@ -60,7 +56,7 @@ program get_dropbox, rclass
         error 459
     }
 
-    // Get rid of the strL (we almost certainly didn't need it)
+    // Get rid of the long string (we almost certainly didn't need it)
     quietly compress
 
     local dropbox_path = dropbox_path[1]
