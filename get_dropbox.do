@@ -4,7 +4,7 @@ program get_dropbox, rclass
     preserve
     clear
     confirm_installed insheetjson
-
+    confirm_installed libjson
     local os = "`c(os)'"
     assert "`os'" != ""
     if "`os'" == "Windows" {
