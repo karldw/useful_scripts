@@ -1,4 +1,8 @@
 
+# R is its own git repo.
+/r
+
+
 ##  R  ##
 # History files
 .Rhistory
